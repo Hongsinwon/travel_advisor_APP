@@ -14,7 +14,7 @@ const Map = ({ setCoords, setBounds, coords, places, setChildClicked }) => {
     <div className={classes.mapContainer}>
       <GoogleMapReact
         // GoogleMapReact는 리액트 17버전에서 사용할 수 있음. 버전 다운그레이드 진행 필수
-        bootstrapURLKeys={{ key: "AIzaSyAv6NVprAUuBX7ScDTNEpT1ikjX0GwGer0" }}
+        bootstrapURLKeys={{ key: "API 키" }}
         defaultCenter={coords}
         center={coords}
         defaultZoom={14}
