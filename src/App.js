@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { CssBaseline, Grid } from "@material-ui/core";
 
-import { getPlacesData } from "./api";
+import { getPlacesData, getWeatherData } from "./api";
 
 // 컴포넌트 가져오기
 import Header from "./components/Header/Header";
@@ -10,6 +10,7 @@ import Map from "./components/Map/Map";
 
 const App = () => {
   const [places, setPlaces] = useState([]); // API에 정보를 받아와 넣을 배열
+  const [weatherData, setWeatherData] = useState([]); // getWeatherData api
   const [filteredPlaces, setFilteredPlaces] = useState([]); // 필터 👉 선택된 평점에 맞춰 정렬
 
   const [childClicked, setChildClicked] = useState(null);
@@ -21,6 +22,7 @@ const App = () => {
 
   const [type, setType] = useState("restaurants");
   const [rating, setRating] = useState("");
+
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
@@ -36,14 +38,19 @@ const App = () => {
   }, [rating]);
 
   useEffect(() => {
-    if(bounds.sw &&  bounds.ne ) {
-    setIsLoading(true);
-    getPlacesData(type, bounds.sw, bounds.ne).then((data) => {
-      setPlaces(data?.filter((place) => place.name && place.num_reviews > 0));
-      setFilteredPlaces([]);
-      setIsLoading(false);
-    });
-  }
+    if (bounds.sw && bounds.ne) {
+      setIsLoading(true);
+
+      getWeatherData(coords.lat, coords.lng).then((data) =>
+        setWeatherData(data)
+      );
+
+      getPlacesData(type, bounds.sw, bounds.ne).then((data) => {
+        setPlaces(data?.filter((place) => place.name && place.num_reviews > 0));
+        setFilteredPlaces([]);
+        setIsLoading(false);
+      });
+    }
   }, [type, bounds]);
 
   return (
@@ -69,6 +76,7 @@ const App = () => {
             coords={coords}
             places={filteredPlaces.length ? filteredPlaces : places}
             setChildClicked={setChildClicked}
+            weatherData={weatherData}
           />
         </Grid>
       </Grid>

@@ -4,9 +4,17 @@ import { Paper, Typography, useMediaQuery } from "@material-ui/core";
 import LocationOnOutlinedIcon from "@material-ui/icons/LocationOnOutlined";
 import Rating from "@material-ui/lab/Rating";
 
-// import mapStyles from '../../mapStyles';
+import mapStyles from "./mapStyles.js";
+
 import useStyles from "./style.js";
-const Map = ({ setCoords, setBounds, coords, places, setChildClicked }) => {
+const Map = ({
+  setCoords,
+  setBounds,
+  coords,
+  places,
+  setChildClicked,
+  weatherData,
+}) => {
   const classes = useStyles();
   const isDesktop = useMediaQuery("(min-width: 600px)");
 
@@ -14,12 +22,16 @@ const Map = ({ setCoords, setBounds, coords, places, setChildClicked }) => {
     <div className={classes.mapContainer}>
       <GoogleMapReact
         // GoogleMapReact는 리액트 17버전에서 사용할 수 있음. 버전 다운그레이드 진행 필수
-        bootstrapURLKeys={{ key: "AIzaSyAv6NVprAUuBX7ScDTNEpT1ikjX0GwGer0" }}
-        defaultCenter={coords}
+        bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_MAPS_API_KEY }}
+        // defaultCenter={coords}
         center={coords}
         defaultZoom={14}
         margin={[50, 50, 50, 50]}
-        options={""}
+        options={{
+          disableDefaultUI: true,
+          zoomControl: true,
+          styles: mapStyles,
+        }}
         onChange={(e) => {
           setCoords({ lat: e.center.lat, lng: e.center.lng });
           setBounds({ ne: e.marginBounds.ne, sw: e.marginBounds.sw });
@@ -58,6 +70,15 @@ const Map = ({ setCoords, setBounds, coords, places, setChildClicked }) => {
             )}
           </div>
         ))}
+        {weatherData?.list?.length &&
+          weatherData.list.map((data, i) => (
+            <div key={i} lat={data.coord.lat} lng={data.coord.lon}>
+              <img
+                src={`http://openweathermap.org/img/w/${data.weather[0].icon}.png`}
+                height="70px"
+              />
+            </div>
+          ))}
       </GoogleMapReact>
     </div>
   );
