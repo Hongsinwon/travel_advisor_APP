@@ -1,8 +1,5 @@
 import axios from "axios";
 
-const URL =
-  "https://travel-advisor.p.rapidapi.com/restaurants/list-in-boundary";
-
 export const getPlacesData = async (type, sw, ne) => {
   try {
     const {
@@ -19,8 +16,7 @@ export const getPlacesData = async (type, sw, ne) => {
         },
         headers: {
           "X-RapidAPI-Host": "travel-advisor.p.rapidapi.com",
-          "X-RapidAPI-Key":
-            process.env.REACT_APP_RAPIDAPI_KEY,
+          "X-RapidAPI-Key": process.env.REACT_APP_RAPIDAPI_KEY,
         },
       }
     );
@@ -42,13 +38,12 @@ export const getWeatherData = async (lat, lng) => {
         },
         headers: {
           "X-RapidAPI-Host": "community-open-weather-map.p.rapidapi.com",
-          "X-RapidAPI-Key":
-          process.env.REACT_APP_RAPIDAPI_KEY,
+          "X-RapidAPI-Key": process.env.REACT_APP_RAPIDAPI_KEY,
         },
       }
     );
 
-    return data
+    return data;
   } catch (error) {
     console.log(error);
   }
